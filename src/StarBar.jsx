@@ -1,7 +1,9 @@
+import ReactDOM from 'react-dom';
 import React, {PropTypes} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import _ from 'lodash';
 import Star from './Star';
+import { QueueAnim } from 'antd';
 
 function noop() {}
 
@@ -49,7 +51,7 @@ const AntdStar = React.createClass({
   },
   componentDidMount() {
     const self = this;
-    self.container = self.refs.stars_container.getDOMNode();
+    self.container = ReactDOM.findDOMNode(self.refs.stars_container);
     self.containerL = self.getOffsetL(self.container.children[0]);
   },
   shouldComponentUpdate() {
@@ -110,15 +112,28 @@ const AntdStar = React.createClass({
     const self = this;
     const props = self.props;
     const {handleClick, handleHover} = self;
-    const {half, prefixCls} = props;
+    const {half, prefixCls, animate} = props;
     const stars = _.range(self.props.starNum);
-    return (
-        <ReactCSSTransitionGroup className={`${prefixCls}-star-wrapper iconfont`} style={self.getStyles()} transitionName="fade" transitionEnterTimeout={500} transitionLeaveTimeout={300} ref="stars_container" component="ul">
-          {stars.map((index) => {
-            return <Star num={index} prefixCls={prefixCls} ifHalf={half} choosed={self.state.num} starClick={handleClick} starHover={handleHover} key={index} />;
-          })}
-        </ReactCSSTransitionGroup>
-		);
+    const starContent = stars.map((index) => {
+      return <Star num={index} prefixCls={prefixCls} ifHalf={half} choosed={self.state.num} starClick={handleClick} starHover={handleHover} key={index} />;
+    })
+
+    if(animate){
+      var config = {};
+      if(animate == "top"){
+        config = [{ opacity: [1, 0], translateY: [0, 50] },{ opacity: [1, 0], translateY: [0, -50]}];
+      }
+      return (
+          <QueueAnim animConfig={config} ease={['easeOutQuart', 'easeInOutQuart']} component="ul" className={`${prefixCls}-star-wrapper iconfont`} style={self.getStyles()} ref="stars_container">
+              {starContent}
+          </QueueAnim>
+      );
+    } else {
+      return (<ul ease={['easeOutQuart', 'easeInOutQuart']} component="ul" className={`${prefixCls}-star-wrapper iconfont`} style={self.getStyles()} ref="stars_container">
+          {starContent}
+      </ul>);
+    }
+    
   },
 });
 
