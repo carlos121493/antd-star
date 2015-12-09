@@ -4,7 +4,7 @@
 React AntdCeshi Component
 
 
-[![NPM version][npm-image]][npm-url]
+[![NPM version][npm-image]][https://www.npmjs.com/package/rc-antd-star]
 [![build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 [![gemnasium deps][gemnasium-image]][gemnasium-url]

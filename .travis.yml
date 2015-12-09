@@ -4,7 +4,7 @@ sudo: false
 
 notifications:
   email:
-  - yiminghe@gmail.com
+  - guowei@shnow.com
 
 node_js:
 - 4.0.0
@@ -19,6 +19,7 @@ before_install:
     npm install mocha-phantomjs -g
     phantomjs --version
 script:
+- npm run saucelabs
 - |
     if [ "$TEST_TYPE" = test ]; then
       npm test
